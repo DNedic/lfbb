@@ -9,7 +9,7 @@ project(lfbb
 )
 
 set(SOURCES
-  src/lfbb.c
+  lfbb/src/lfbb.c
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
@@ -18,5 +18,5 @@ target_compile_features(${PROJECT_NAME} PUBLIC c_std_11)
 
 target_include_directories(${PROJECT_NAME}
 PUBLIC
-  inc
+  lfbb/inc
 )
