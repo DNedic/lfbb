@@ -144,7 +144,12 @@ uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available) {
   const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
   const size_t size = inst->size;
 
-  /* Calculate and set available data and return a pointer to it */
+  /* Read overflows */
+  if (r == i) {
+    *available = w;
+    return &inst->data[0];
+  }
+
   *available = CalcAvailable(w, i, r, size);
   return &inst->data[r];
 }
