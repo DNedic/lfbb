@@ -145,23 +145,21 @@ uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available) {
   const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
   const size_t size = inst->size;
 
-  /* If the read index is equal to invalidate index,
-     we have reached the end of contigous data.
-     Depending on whether there is available data,
-     overflow the read index */
-  if (r == i) {
-    *available = CalcAvailableOverflow(w, r);
-    if (*available != 0U) {
+  if (w == r) {
+    *available = 0;
+    return NULL;
+  } else if (w > r) {
+    *available = w - r;
+    return &inst->data[r];
+  } else {
+    if (r != i) {
+      *available = i - r;
+      return &inst->data[r];
+    } else {
+      *available = w;
       return &inst->data[0];
     }
   }
-
-  *available = CalcAvailable(w, i, r, size);
-  if (*available != 0U) {
-    return &inst->data[r];
-  }
-
-  return NULL;
 }
 
 void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
