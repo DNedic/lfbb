@@ -15,6 +15,39 @@ A bipartite buffer is a variation of the classic ring buffer with the ability to
 * MIT Licensed
 * Supports CMake FetchContent()
 
+## How to use
+LFBB is most useful for larger data transfers compared to queues and trumps them in efficiency in such scenarios. Particularly notable is DMA use, working on data present in the buffer without having to dequeue it, using stdlib memcpy which is orders of magnitude faster than bytewise copies.
+
+Shown here is an example of typical use:
+* Consumer thread/interrupt
+```c
+size_t data_available;
+uint8_t *read_location = LFBB_ReadAcquire(&lfbb_adc, &data_available);
+
+if (read_location != NULL) {
+  size_t data_read = DoStuffWithData(read_location);
+  LFBB_ReadRelease(&lfbb_adc, data_read);
+}
+```
+
+* Producer thread/interrupt
+```c
+bool write_started;
+
+if (!write_started) {
+  uint8_t *write_location = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
+  if (write_location != NULL) {
+    ADC_StartDma(&adc_dma_h, write_location, write_size);
+    write_started = true;
+  }
+} else {
+  if (ADC_PollDmaComplete(&adc_dma_h) {
+    LFBB_WriteRelease(&lfbb_adc, sizeof(data));
+    write_started = false;
+  }
+}
+```
+
 ## Caveats
 * The library is still work in progress at the moment, more documentation, tests and examples will be added
 * The library does not implement alignment of writes and reads, it is up to the user to only write in factors they want the data to be aligned to, adequately size and align the buffer used
