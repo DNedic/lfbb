@@ -63,12 +63,12 @@ void LFBB_Init(LFBB_Inst_Type *inst, uint8_t *data_array, const size_t size) {
   assert(data_array != NULL);
   assert(size != 0U);
 
+  inst->data = data_array;
+  inst->size = size;
   inst->r = 0U;
   inst->w = 0U;
   inst->i = 0U;
   inst->read_wrapped = false;
-  inst->size = size;
-  inst->data = data_array;
 }
 
 uint8_t *LFBB_WriteAcquire(const LFBB_Inst_Type *inst,
