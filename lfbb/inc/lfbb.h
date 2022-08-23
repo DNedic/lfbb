@@ -67,7 +67,6 @@ typedef struct {
   atomic_size_t r;    /**< Read index */
   atomic_size_t w;    /**< Write index */
   atomic_size_t i;    /**< Invalidated space index */
-  bool write_wrapped; /**< Write wrapped flag */
 } LFBB_Inst_Type;
 
 /******************** FUNCTION PROTOTYPES *********************/

@@ -69,7 +69,6 @@ void LFBB_Init(LFBB_Inst_Type *inst, uint8_t *data_array, const size_t size) {
   inst->r = 0U;
   inst->w = 0U;
   inst->i = 0U;
-  inst->write_wrapped = false;
 }
 
 uint8_t *LFBB_WriteAcquire(LFBB_Inst_Type *inst, const size_t free_required) {
@@ -96,7 +95,6 @@ uint8_t *LFBB_WriteAcquire(LFBB_Inst_Type *inst, const size_t free_required) {
 
   /* If that doesn't work try from the beginning of the buffer */
   if (free_required <= free - linear_free) {
-    inst->write_wrapped = true;
     return &inst->data[0];
   }
 
@@ -113,10 +111,9 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
   size_t i = atomic_load_explicit(&inst->i, memory_order_relaxed);
 
   /* If the write wrapped set the invalidate index and reset write index*/
-  if (inst->write_wrapped) {
+  if (w + written >= inst->size) {
     i = w;
     w = 0U;
-    inst->write_wrapped = false;
   }
 
   /* Increment the write index and wrap to 0 if needed */
