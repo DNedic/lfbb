@@ -49,6 +49,10 @@
 #include <stdlib.h>
 #ifndef __cplusplus
 #include <stdbool.h>
+#include <stdatomic.h>
+#else
+#include <atomic>
+#define atomic_size_t std::atomic_size_t
 #endif
 
 #ifdef __cplusplus
