@@ -172,6 +172,7 @@ void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
 
   /* If the read wrapped, overflow the read index */
   if (inst->read_wrapped) {
+    inst->read_wrapped = false;
     r = 0U;
   }
 
