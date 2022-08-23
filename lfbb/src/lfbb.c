@@ -55,8 +55,6 @@
 /******************** FUNCTION PROTOTYPES *********************/
 
 static size_t CalcFree(size_t w, size_t r, size_t size);
-static size_t CalcAvailable(size_t w, size_t i, size_t r, size_t size);
-static size_t CalcAvailableOverflow(size_t w, size_t r);
 
 /******************** EXPORTED FUNCTIONS **********************/
 
@@ -194,23 +192,5 @@ static size_t CalcFree(const size_t w, const size_t r, const size_t size) {
     return (r - w) - 1U;
   } else {
     return (size - (w - r)) - 1U;
-  }
-}
-
-static size_t CalcAvailable(const size_t w, const size_t i, const size_t r,
-                            const size_t size) {
-  const size_t avail_end = MIN(w, i);
-  if (avail_end >= r) {
-    return avail_end - r;
-  } else {
-    return size - (r - avail_end);
-  }
-}
-
-static size_t CalcAvailableOverflow(const size_t w, const size_t r) {
-  if (w < r) {
-    return w;
-  } else {
-    return 0U;
   }
 }
