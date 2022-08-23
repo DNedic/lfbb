@@ -34,6 +34,18 @@ TEST_CASE("Try to acquire too much data", "[acquire_too_much]") {
   REQUIRE(write_location == nullptr);
 }
 
+TEST_CASE("Try to acquire read with an empty buffer", "[read_empty]") {
+  uint8_t buf[512];
+
+  LFBB_Inst_Type lfbb;
+  LFBB_Init(&lfbb, buf, sizeof(buf));
+
+  size_t read_available;
+  uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
+  REQUIRE(read_location == nullptr);
+  REQUIRE(read_available == 0);
+}
+
 TEST_CASE("Write with overflow condition", "[write_overflow]") {
   uint8_t buf[512];
   const uint8_t test_data[320] = {0xE5U};
