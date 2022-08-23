@@ -48,8 +48,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #ifndef __cplusplus
-#include <stdbool.h>
 #include <stdatomic.h>
+#include <stdbool.h>
 #else
 #include <atomic>
 #define atomic_size_t std::atomic_size_t
@@ -62,11 +62,12 @@ extern "C" {
 /*************************** TYPES ****************************/
 
 typedef struct {
-  uint8_t *data;      /**< Pointer to the data array */
-  size_t size;        /**< Size of the data array */
-  atomic_size_t r;    /**< Read index */
-  atomic_size_t w;    /**< Write index */
-  atomic_size_t i;    /**< Invalidated space index */
+  uint8_t *data;     /**< Pointer to the data array */
+  size_t size;       /**< Size of the data array */
+  atomic_size_t r;   /**< Read index */
+  atomic_size_t w;   /**< Write index */
+  atomic_size_t i;   /**< Invalidated space index */
+  bool read_wrapped; /**< Read wrapped flag, used only in the consumer */
 } LFBB_Inst_Type;
 
 /******************** FUNCTION PROTOTYPES *********************/
@@ -86,7 +87,7 @@ void LFBB_Init(LFBB_Inst_Type *inst, uint8_t *data_array, size_t size);
  * @param[in] Free linear space in the buffer required
  * @retval Pointer to the beginning of the linear space
  */
-uint8_t *LFBB_WriteAcquire(LFBB_Inst_Type *inst, size_t free_required);
+uint8_t *LFBB_WriteAcquire(const LFBB_Inst_Type *inst, size_t free_required);
 
 /**
  * @brief Releases the bipartite buffer after a write
@@ -102,7 +103,7 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, size_t written);
  * @param[out] Available linear data in the buffer
  * @retval Pointer to the beginning of the data
  */
-uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available);
+uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available);
 
 /**
  * @brief Releases the bipartite buffer after a read

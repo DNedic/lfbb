@@ -70,9 +70,11 @@ void LFBB_Init(LFBB_Inst_Type *inst, uint8_t *data_array, const size_t size) {
   inst->r = 0U;
   inst->w = 0U;
   inst->i = 0U;
+  inst->read_wrapped = false;
 }
 
-uint8_t *LFBB_WriteAcquire(LFBB_Inst_Type *inst, const size_t free_required) {
+uint8_t *LFBB_WriteAcquire(const LFBB_Inst_Type *inst,
+                           const size_t free_required) {
   assert(inst != NULL);
   assert(inst->data != NULL);
 
@@ -134,7 +136,7 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
   atomic_store_explicit(&inst->w, w, memory_order_release);
 }
 
-uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available) {
+uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
   assert(inst != NULL);
   assert(inst->data != NULL);
   assert(available != NULL);
@@ -157,6 +159,7 @@ uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available) {
       return &inst->data[r];
     } else {
       *available = w;
+      inst->read_wrapped = true;
       return &inst->data[0];
     }
   }
@@ -168,6 +171,11 @@ void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
 
   /* Preload variables with adequate memory ordering */
   size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
+
+  /* If the read wrapped, overflow the read index */
+  if (inst->read_wrapped) {
+    r = 0U;
+  }
 
   /* Increment the read index and wrap to 0 if needed */
   r += read;
