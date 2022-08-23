@@ -51,4 +51,4 @@ if (!write_started) {
 ## Caveats
 * The library is still work in progress at the moment, more documentation, tests and examples will be added
 * The library does not implement alignment of writes and reads, it is up to the user to only write in factors they want the data to be aligned to, adequately size and align the buffer used
-* Cache invalidation must be manually done for DMA transfers
+* Cache invalidation must be manually done for DMA transfers, the MPU can also be used to prevent caching the instance
