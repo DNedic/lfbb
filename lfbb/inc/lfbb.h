@@ -44,7 +44,6 @@
 #ifndef LFBB_H
 #define LFBB_H
 
-#include <stdatomic.h>
 #include <stdint.h>
 #include <stdlib.h>
 #ifndef __cplusplus
