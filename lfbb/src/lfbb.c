@@ -56,6 +56,7 @@
 
 static size_t CalcFree(size_t w, size_t r, size_t size);
 static size_t CalcAvailable(size_t w, size_t i, size_t r, size_t size);
+static size_t CalcAvailableOverflow(size_t w, size_t r);
 
 /******************** EXPORTED FUNCTIONS **********************/
 
@@ -144,14 +145,23 @@ uint8_t *LFBB_ReadAcquire(const LFBB_Inst_Type *inst, size_t *available) {
   const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
   const size_t size = inst->size;
 
-  /* Read overflows */
+  /* If the read index is equal to invalidate index,
+     we have reached the end of contigous data.
+     Depending on whether there is available data,
+     overflow the read index */
   if (r == i) {
-    *available = w;
-    return &inst->data[0];
+    *available = CalcAvailableOverflow(w, r);
+    if (*available != 0U) {
+      return &inst->data[0];
+    }
   }
 
   *available = CalcAvailable(w, i, r, size);
-  return &inst->data[r];
+  if (*available != 0U) {
+    return &inst->data[r];
+  }
+
+  return NULL;
 }
 
 void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
@@ -188,5 +198,13 @@ static size_t CalcAvailable(const size_t w, const size_t i, const size_t r,
     return avail_end - r;
   } else {
     return size - (r - avail_end);
+  }
+}
+
+static size_t CalcAvailableOverflow(const size_t w, const size_t r) {
+  if (w < r) {
+    return w;
+  } else {
+    return 0U;
   }
 }
