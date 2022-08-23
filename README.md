@@ -32,8 +32,6 @@ if (read_location != NULL) {
 
 * Producer thread/interrupt
 ```c
-bool write_started = false;
-
 if (!write_started) {
   uint8_t *write_location = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
   if (write_location != NULL) {
