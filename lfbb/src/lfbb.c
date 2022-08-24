@@ -144,21 +144,29 @@ uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
   const size_t i = atomic_load_explicit(&inst->i, memory_order_acquire);
   const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
 
+  /* When write and read indexes are equal, the buffer is empty */
   if (w == r) {
     *available = 0;
     return NULL;
-  } else if (w > r) {
+  }
+
+  /* Simplest case, write index is ahead of read index */
+  if (w > r) {
     *available = w - r;
     return &inst->data[r];
-  } else {
-    if (r != i) {
-      *available = i - r;
-      return &inst->data[r];
-    } else {
+  }
+
+  /* Write has wrapped, the write index is behind the read index*/
+  if (w < r) {
+    /* Read index reached the invalidate index, make the read wrap */
+    if (r == i) {
       *available = w;
       inst->read_wrapped = true;
       return &inst->data[0];
     }
+    /* There is some data until the invalidate index */
+    *available = i - r;
+    return &inst->data[r];
   }
 }
 
