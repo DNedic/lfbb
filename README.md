@@ -25,8 +25,8 @@ size_t data_available;
 uint8_t *read_location = LFBB_ReadAcquire(&lfbb_adc, &data_available);
 
 if (read_location != NULL) {
-  size_t data_read = DoStuffWithData(read_location);
-  LFBB_ReadRelease(&lfbb_adc, data_read);
+  size_t data_used = DoStuffWithData(read_location);
+  LFBB_ReadRelease(&lfbb_adc, data_used);
 }
 ```
 
