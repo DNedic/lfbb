@@ -3,8 +3,6 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-project(tests)
-
 Include(FetchContent)
 
 FetchContent_Declare(
@@ -15,12 +13,10 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-add_subdirectory(../lfbb lfbb)
+add_executable(tests tests.cpp)
 
-add_executable(${PROJECT_NAME} tests.cpp)
-
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(tests
 PRIVATE
-  lfbb
+  ${PROJECT_NAME}
   Catch2::Catch2WithMain
 )
