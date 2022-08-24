@@ -189,8 +189,7 @@ TEST_CASE("Interleaved write and read without enough space",
   size_t read_available;
   uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
 
-  /* 3. Write acquire, a linear space after the read linear space is reserved
-   * for writing and is copied to*/
+  /* 3. Write acquire, attempt to acquire more linear space than available */
   const uint8_t test_data2[240] = {0xA3U};
   write_location = LFBB_WriteAcquire(&lfbb, sizeof(test_data2));
   REQUIRE(write_location == nullptr);
