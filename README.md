@@ -1,5 +1,5 @@
 # LFBB - Lock Free Bipartite Buffer
-![Configure and Build](https://github.com/DNedic/lfbb/actions/workflows/.github/workflows/cmake.yml/badge.svg)
+![CMake](https://github.com/DNedic/lfbb/actions/workflows/.github/workflows/cmake.yml/badge.svg)
 
 LFBB is a bipartite buffer implementation written in standard C11, suitable for all platforms, from deeply embedded to HPC uses. It is lock-free for single consumer single producer scenarios making it incredibly performant and easy to use.
 
