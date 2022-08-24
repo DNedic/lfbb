@@ -35,7 +35,7 @@ if (read_location != NULL) {
 if (!write_started) {
   uint8_t *write_location = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
   if (write_location != NULL) {
-    ADC_StartDma(&adc_dma_h, write_location, write_size);
+    ADC_StartDma(&adc_dma_h, write_location, sizeof(data));
     write_started = true;
   }
 } else {
