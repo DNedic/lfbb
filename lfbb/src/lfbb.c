@@ -156,18 +156,16 @@ uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
     return &inst->data[r];
   }
 
-  /* Write has wrapped, the write index is behind the read index*/
-  if (w < r) {
-    /* Read index reached the invalidate index, make the read wrap */
-    if (r == i) {
-      *available = w;
-      inst->read_wrapped = true;
-      return &inst->data[0];
-    }
-    /* There is some data until the invalidate index */
-    *available = i - r;
-    return &inst->data[r];
+  /* Read index reached the invalidate index, make the read wrap */
+  if (r == i) {
+    *available = w;
+    inst->read_wrapped = true;
+    return &inst->data[0];
   }
+
+  /* There is some data until the invalidate index */
+  *available = i - r;
+  return &inst->data[r];
 }
 
 void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
