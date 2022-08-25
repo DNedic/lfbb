@@ -8,17 +8,21 @@ LFBB is a bipartite buffer implementation written in standard C11, suitable for 
 A bipartite buffer is a variation of the classic ring buffer with the ability to always be able to provide the user with contigous memory regions inside the buffer for writing/reading if there is enough space/data.
 [Here](https://www.codeproject.com/Articles/3479/The-Bip-Buffer-The-Circular-Buffer-with-a-Twist) is a nice writeup about the essence of bipartite buffers.
 
+## Why use a bipartite buffer
+* To offload transfers to DMA increasing the transfer speed and freeing up CPU time
+* To avoid creating intermediate buffers for APIs that require contigous data
+* To process data inside the buffer without dequeing it
+* For scenarios where operations on data might fail or only some data might be used
+* To use stdlib memcpy which is faster than bytewise implementations used in most queues and ring buffers
+
 ## Features
 * Written in standard C11, compatible with all platforms supporting it
-* Especially suitable for DMA transfers
 * Lock free thread safe when used in single producer single consumer scenarios
 * No dynamic allocation
 * MIT Licensed
 * Supports CMake FetchContent()
 
 ## How to use
-LFBB is most useful for larger data transfers compared to queues and trumps them in efficiency in such scenarios. Particularly notable is DMA use, working on data present in the buffer without having to dequeue it, using stdlib memcpy which is orders of magnitude faster than bytewise copies.
-
 Shown here is an example of typical use:
 * Consumer thread/interrupt
 ```c
