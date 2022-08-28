@@ -49,6 +49,7 @@
 #ifndef __cplusplus
 #include <stdatomic.h>
 #include <stdbool.h>
+#include <stdalign.h>
 #else
 #include <atomic>
 #define atomic_size_t std::atomic_size_t
@@ -64,17 +65,14 @@ extern "C" {
 
 typedef struct {
 #ifdef LFBB_CACHELINE_ALIGN
-  uint8_t pad_r[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
-#endif
+  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t r; /**< Read index */
+  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t w; /**< Write index */
+  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t i; /**< Invalidated space index */
+#else
   atomic_size_t r; /**< Read index */
-#ifdef LFBB_CACHELINE_ALIGN
-  uint8_t pad_w[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
-#endif
   atomic_size_t w; /**< Write index */
-#ifdef LFBB_CACHELINE_ALIGN
-  uint8_t pad_i[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
-#endif
   atomic_size_t i;   /**< Invalidated space index */
+#endif
   size_t size;       /**< Size of the data array */
   uint8_t *data;     /**< Pointer to the data array */
   bool read_wrapped; /**< Read wrapped flag, used only in the consumer */

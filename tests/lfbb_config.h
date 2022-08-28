@@ -48,9 +48,8 @@
  * embedded system that doesn't do manual cache invalidation or MPU
  * configration. Uncomment to enable lock-free operation in such cases.
  * What the define does under the hood is align all the indexes to cacheline
- * size by adding padding to the instance structure, ensuring no two indexes can
- * be present in a single cacheline. Underlying hardware should have cache
- * coherence. */
+ * size, ensuring no two indexes can be present in a single cacheline.
+ * Underlying hardware should have cache coherence. */
 #define LFBB_CACHELINE_ALIGN
 
 /* Common cacheline sizes to be used for LFBB_CACHELINE_LENGTH */
