@@ -22,6 +22,14 @@ A bipartite buffer is a variation of the classic ring buffer with the ability to
 * MIT Licensed
 * Supports CMake FetchContent()
 
+## How to get
+There are three main ways to get the library:
+* Using CMake FetchContent()
+* As a git submodule
+* By downloading a release from GitHub
+
+It is also neccecary to add a configuration header named ```lfbb_config.h``` to your project, a default configuration header is provided in the sources, copying it and modifying if needed is the easiest way to get started.
+
 ## How to use
 Shown here is an example of typical use:
 * Consumer thread/interrupt
