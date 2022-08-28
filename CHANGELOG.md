@@ -11,3 +11,7 @@
 ## 1.0.2
 
 - Switched to hierarchical CMake setup with tests conditionally pulled in if the library is not pulled in as a dependency
+
+## 1.1.0
+
+- Added optional cacheline alignment enabling use on hosted environments and embedded environments that do not manually invalidate cache or disable instance caching with the MPU/MMU in a lock free manner
