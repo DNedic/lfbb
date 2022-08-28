@@ -51,6 +51,13 @@ if (!write_started) {
 }
 ```
 
+## Configuration
+There are multiple ways to ensure the lock-free nature of LFBB on CPUs with caches:
+* Invalidate cache manually (for embedded and freestanding)
+* Use the MPU/MMU to disable caching of the memory area containing the instance (for embedded and freestanding)
+* Set LFBB_CACHELINE_ALIGN and LFBB_CACHELINE_LENGTH in ```lfbb_config.h``` (for all systems)
+
+On embedded systems it is prefferable to use the first two methods to avoid wasting RAM on padding.
+
 ## Caveats
 * The library does not implement alignment of writes and reads, it is up to the user to only write in factors they want the data to be aligned to, adequately size and align the buffer used
-* Cache invalidation must be manually done for DMA transfers, the MPU can also be used to prevent caching the instance

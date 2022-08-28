@@ -8,6 +8,11 @@ project(lfbb
   LANGUAGES C CXX
 )
 
+# Only include test configuration if we're working on the library
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  include_directories(tests)
+endif()
+
 add_subdirectory(lfbb)
 
 # Only build tests if we're actually working on the library,

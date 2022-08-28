@@ -54,6 +54,8 @@
 #define atomic_size_t std::atomic_size_t
 #endif
 
+#include "lfbb_config.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -61,11 +63,20 @@ extern "C" {
 /*************************** TYPES ****************************/
 
 typedef struct {
-  uint8_t *data;     /**< Pointer to the data array */
-  size_t size;       /**< Size of the data array */
-  atomic_size_t r;   /**< Read index */
-  atomic_size_t w;   /**< Write index */
+#ifdef LFBB_CACHELINE_ALIGN
+  uint8_t pad_r[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
+#endif
+  atomic_size_t r; /**< Read index */
+#ifdef LFBB_CACHELINE_ALIGN
+  uint8_t pad_w[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
+#endif
+  atomic_size_t w; /**< Write index */
+#ifdef LFBB_CACHELINE_ALIGN
+  uint8_t pad_i[LFBB_CACHELINE_LENGTH - sizeof(atomic_size_t)];
+#endif
   atomic_size_t i;   /**< Invalidated space index */
+  size_t size;       /**< Size of the data array */
+  uint8_t *data;     /**< Pointer to the data array */
   bool read_wrapped; /**< Read wrapped flag, used only in the consumer */
 } LFBB_Inst_Type;
 
