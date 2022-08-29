@@ -17,7 +17,7 @@ A bipartite buffer is a variation of the classic ring buffer with the ability to
 
 ## Features
 * Written in standard C11, compatible with all platforms supporting it
-* Lock free thread safe when used in single producer single consumer scenarios
+* Lock free thread and optionally multicore safe when used in single producer single consumer scenarios
 * No dynamic allocation
 * MIT Licensed
 * Supports CMake FetchContent()
@@ -61,11 +61,9 @@ if (!write_started) {
 
 ## Multicore safety
 There are multiple ways to ensure the lock-free nature of LFBB on CPUs with caches and multiple cores:
-* Set LFBB_CACHELINE_ALIGN and LFBB_CACHELINE_LENGTH in ```lfbb_config.h``` (for all systems)
+* Set ```LFBB_CACHELINE_ALIGN``` and ```LFBB_CACHELINE_LENGTH``` in ```lfbb_config.h``` (for hosted)
 * Invalidate cache manually (for embedded and freestanding)
 * Use the MPU/MMU to disable caching of the data buffer (for embedded and freestanding)
-
-On embedded systems it is prefferable to use the later two methods to avoid wasting RAM on padding.
 
 ## Caveats
 * The library does not implement alignment of writes and reads, it is up to the user to only write in factors they want the data to be aligned to, adequately size and align the buffer used
