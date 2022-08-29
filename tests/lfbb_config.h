@@ -45,8 +45,8 @@
 /************************** DEFINE ****************************/
 
 /* This define should be used when the library is used in a multicore
- * environment on a hosted system. Uncomment to enable lock-free operation in
- * such cases. What the define does under the hood is align all the indexes to
+ * environment on a hosted system. Comment this out when using on embedded
+ * systems. What the define does under the hood is align all the indexes to
  * cacheline size, ensuring no two indexes can be present in a single cacheline.
  * Underlying hardware should have cache coherence. */
 #define LFBB_MULTICORE_HOSTED
