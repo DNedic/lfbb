@@ -23,3 +23,7 @@
 ## 1.1.2
 
 - Important documentation fixes regarding multicore vs DMA use
+
+## 1.1.3
+
+- Documentation and configuration header improvements
