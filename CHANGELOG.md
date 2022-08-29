@@ -19,3 +19,7 @@
 ## 1.1.1
 
 - Switched to using C11 standard alignas specifier instead of manually adding padding to the structure for cacheline alignment
+
+## 1.1.2
+
+- Important documentation fixes regarding multicore vs DMA use

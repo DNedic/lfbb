@@ -2,8 +2,8 @@
  * @file lfbb_config_default.h
  * @brief This header defines configuration variables for the
  * library, please read carefully and chose the right ones.
- * @version	1.1.1
- * @date 28. August 2022
+ * @version	1.1.2
+ * @date 29. August 2022
  * @author Djordje Nedic
  **************************************************************/
 
@@ -35,7 +35,7 @@
  * This file is part of LFBB - Lock Free Bipartite Buffer
  *
  * Author:          Djordje Nedic <nedic.djordje2@gmail.com>
- * Version:         v1.1.1
+ * Version:         v1.1.2
  **************************************************************/
 
 /************************** INCLUDE ***************************/
