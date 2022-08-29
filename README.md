@@ -61,7 +61,7 @@ if (!write_started) {
 
 ## Multicore safety
 There are multiple ways to ensure the lock-free nature of LFBB on CPUs with caches and multiple cores:
-* Set ```LFBB_CACHELINE_ALIGN``` and ```LFBB_CACHELINE_LENGTH``` in ```lfbb_config.h``` (for hosted)
+* Set ```LFBB_MULTICORE_HOSTED``` and ```LFBB_CACHELINE_LENGTH``` in ```lfbb_config.h``` (for hosted)
 * Invalidate cache manually (for embedded and freestanding)
 * Use the MPU/MMU to disable caching of the data buffer (for embedded and freestanding)
 

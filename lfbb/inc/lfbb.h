@@ -64,7 +64,7 @@ extern "C" {
 /*************************** TYPES ****************************/
 
 typedef struct {
-#ifdef LFBB_CACHELINE_ALIGN
+#ifdef LFBB_MULTICORE_HOSTED
   alignas(LFBB_CACHELINE_LENGTH) atomic_size_t r; /**< Read index */
   alignas(LFBB_CACHELINE_LENGTH) atomic_size_t w; /**< Write index */
   alignas(LFBB_CACHELINE_LENGTH) atomic_size_t i; /**< Invalidated space index */

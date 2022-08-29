@@ -49,7 +49,7 @@
  * such cases. What the define does under the hood is align all the indexes to
  * cacheline size, ensuring no two indexes can be present in a single cacheline.
  * Underlying hardware should have cache coherence. */
-#define LFBB_CACHELINE_ALIGN
+#define LFBB_MULTICORE_HOSTED
 
 /* Common cacheline sizes to be used for LFBB_CACHELINE_LENGTH */
 #define LFBB_CACHELINE_LENGTH_ARMV8 64U
