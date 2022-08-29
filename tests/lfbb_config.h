@@ -44,12 +44,13 @@
 
 /************************** DEFINE ****************************/
 
-/* This define should be used when the library is run on a hosted system or an
- * embedded system that doesn't do manual cache invalidation or MPU
- * configration. Uncomment to enable lock-free operation in such cases.
- * What the define does under the hood is align all the indexes to cacheline
- * size, ensuring no two indexes can be present in a single cacheline.
- * Underlying hardware should have cache coherence. */
+/* This define should be used when the library is used in a multicore
+ * environment on a hosted system or for inter-core communication on an embedded
+ * system that doesn't do manual cache invalidation or MPU configration.
+ * Uncomment to enable lock-free operation in such cases. What the define does
+ * under the hood is align all the indexes to cacheline size, ensuring no two
+ * indexes can be present in a single cacheline. Underlying hardware should have
+ * cache coherence. */
 #define LFBB_CACHELINE_ALIGN
 
 /* Common cacheline sizes to be used for LFBB_CACHELINE_LENGTH */

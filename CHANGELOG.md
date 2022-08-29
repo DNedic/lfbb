@@ -14,7 +14,7 @@
 
 ## 1.1.0
 
-- Added optional cacheline alignment enabling use on hosted environments and embedded environments that do not manually invalidate cache or disable instance caching with the MPU/MMU in a lock free manner
+- Added optional cacheline alignment enabling multicore safe use on hosted environments and embedded environments that do not manually invalidate cache or disable data buffer caching with the MPU/MMU in a lock free manner
 
 ## 1.1.1
 
