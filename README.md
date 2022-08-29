@@ -5,10 +5,11 @@ LFBB is a bipartite buffer implementation written in standard C11, suitable for 
 
 ## What is a bipartite buffer
 
-A bipartite buffer is a variation of the classic ring buffer with the ability to always be able to provide the user with contigous memory regions inside the buffer for writing/reading if there is enough space/data.
+A bipartite buffer is a variation of the classic [ring buffer](https://en.wikipedia.org/wiki/Circular_buffer) with the ability to always be able to provide the user with contigous memory regions inside the buffer for writing/reading if there is enough space/data.
 [Here](https://www.codeproject.com/Articles/3479/The-Bip-Buffer-The-Circular-Buffer-with-a-Twist) is a nice writeup about the essence of bipartite buffers.
 
 ## Why use a bipartite buffer
+A bipartite buffer should be used everywhere a ring buffer is used if you want:
 * To offload transfers to DMA increasing the transfer speed and freeing up CPU time
 * To avoid creating intermediate buffers for APIs that require contigous data
 * To process data inside the buffer without dequeing it
@@ -20,12 +21,12 @@ A bipartite buffer is a variation of the classic ring buffer with the ability to
 * Lock free thread and optionally multicore safe when used in single producer single consumer scenarios
 * No dynamic allocation
 * MIT Licensed
-* Supports CMake FetchContent()
+* Supports CMake [FetchContent()](https://cmake.org/cmake/help/latest/module/FetchContent.html)
 
 ## How to get
 There are three main ways to get the library:
-* Using CMake FetchContent()
-* As a git submodule
+* Using CMake [FetchContent()](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+* As a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 * By downloading a release from GitHub
 
 It is also neccecary to add a configuration header named ```lfbb_config.h``` to your project, a default configuration header is provided in the sources, copying it and modifying if needed is the easiest way to get started.
