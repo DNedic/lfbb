@@ -47,31 +47,38 @@
 #include <stdint.h>
 #include <stdlib.h>
 #ifndef __cplusplus
+#include <stdalign.h>
 #include <stdatomic.h>
 #include <stdbool.h>
-#include <stdalign.h>
 #else
 #include <atomic>
 #define atomic_size_t std::atomic_size_t
 #endif
 
-#include "lfbb_config.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+#ifndef LFBB_MULTICORE_HOSTED
+#define LFBB_MULTICORE_HOSTED true
+#endif
+
+#ifndef LFBB_CACHELINE_LENGTH
+#define LFBB_CACHELINE_LENGTH 64U
+#endif
+
 /*************************** TYPES ****************************/
 
 typedef struct {
-#ifdef LFBB_MULTICORE_HOSTED
+#if LFBB_MULTICORE_HOSTED
   alignas(LFBB_CACHELINE_LENGTH) atomic_size_t r; /**< Read index */
   alignas(LFBB_CACHELINE_LENGTH) atomic_size_t w; /**< Write index */
-  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t i; /**< Invalidated space index */
+  alignas(LFBB_CACHELINE_LENGTH)
+      atomic_size_t i; /**< Invalidated space index */
 #else
   atomic_size_t r; /**< Read index */
   atomic_size_t w; /**< Write index */
-  atomic_size_t i;   /**< Invalidated space index */
+  atomic_size_t i; /**< Invalidated space index */
 #endif
   size_t size;       /**< Size of the data array */
   uint8_t *data;     /**< Pointer to the data array */

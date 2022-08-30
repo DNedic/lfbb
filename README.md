@@ -29,8 +29,6 @@ There are three main ways to get the library:
 * As a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 * By downloading a release from GitHub
 
-It is also necessary to add a configuration header named ```lfbb_config.h``` to your project, a default configuration header is provided in the sources, copying it and modifying if needed is the easiest way to get started.
-
 ## How to use
 Shown here is an example of typical use:
 * Consumer thread/interrupt
@@ -60,12 +58,21 @@ if (!write_started) {
 }
 ```
 
-## Multicore safety
-There are multiple ways to ensure the lock-free nature of LFBB on CPUs with caches and multiple cores:
-* Set ```LFBB_MULTICORE_HOSTED``` and ```LFBB_CACHELINE_LENGTH``` in ```lfbb_config.h``` (for hosted)
-* Invalidate cache manually (for embedded and freestanding)
-* Use the MPU/MMU to disable caching of the data buffer (for embedded and freestanding)
+## Configuration
+By default the library is configured to be thread and multicore safe on most systems, however some
+configuration may be needed for space efficiency on embedded systems and on systems with nonstandard cacheline lengths.
+
+The library offers two configuration defines ```LFBB_MULTICORE_HOSTED``` and ```LFBB_CACHELINE_LENGTH``` that can be passed by the build system or defined before including the library.
+
+On embedded systems it is usually required to do manual cache synchronization, so ```LFBB_MULTICORE_HOSTED``` can be set to ```false``` to avoid wasting space on padding for cacheline alignment of indexes.
+
+Some systems have a non-typical cacheline length (for instance the apple M1/M2 CPUs have a cacheline length of 128 bytes), and ```LFBB_CACHELINE_LENGTH``` should be set accordingly in those cases.
+
+## Dealing with caches on embedded systems
+When using the library with DMA or multicore on embedded systems with cache it is necessary to perform manual cache synchronization in one of the following ways:
+* Using platform specific data synchronization barriers (```DSB``` on ARM)
+* By manually invalidating cache
+* By setting the MPU/MMU up to not cache the data buffer
 
 ## Caveats
 * The library does not implement alignment of writes and reads, it is up to the user to only write in factors they want the data to be aligned to, adequately size and align the buffer used
-* Cache invalidation must be manually done for DMA transfers, the MPU can also be used to prevent caching the data buffer
