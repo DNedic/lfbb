@@ -18,7 +18,7 @@ A bipartite buffer should be used everywhere a ring buffer is used if you want:
 
 ## Features
 * Written in standard C11, compatible with all platforms supporting it
-* Lock free thread and optionally multicore safe when used in single producer single consumer scenarios
+* Lock free thread and multicore safe when used in single producer single consumer scenarios
 * No dynamic allocation
 * MIT Licensed
 * Supports CMake [FetchContent()](https://cmake.org/cmake/help/latest/module/FetchContent.html)
@@ -29,7 +29,7 @@ There are three main ways to get the library:
 * As a [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
 * By downloading a release from GitHub
 
-It is also neccecary to add a configuration header named ```lfbb_config.h``` to your project, a default configuration header is provided in the sources, copying it and modifying if needed is the easiest way to get started.
+It is also necessary to add a configuration header named ```lfbb_config.h``` to your project, a default configuration header is provided in the sources, copying it and modifying if needed is the easiest way to get started.
 
 ## How to use
 Shown here is an example of typical use:
