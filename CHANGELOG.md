@@ -27,3 +27,7 @@
 ## 1.1.3
 
 - Documentation and configuration header improvements
+
+## 1.2.0
+
+- Switched away from needing a configuration header to defining configuration options by the build system or before library inclusion
