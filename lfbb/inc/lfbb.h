@@ -59,6 +59,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+/************************** DEFINE ****************************/
+
 #ifndef LFBB_MULTICORE_HOSTED
 #define LFBB_MULTICORE_HOSTED true
 #endif
