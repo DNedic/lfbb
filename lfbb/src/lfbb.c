@@ -158,8 +158,8 @@ uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
 
   /* Read index reached the invalidate index, make the read wrap */
   if (r == i) {
-    *available = w;
     inst->read_wrapped = true;
+    *available = w;
     return &inst->data[0];
   }
 
