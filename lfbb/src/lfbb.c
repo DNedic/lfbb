@@ -194,7 +194,7 @@ void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
 /********************* PRIVATE FUNCTIONS **********************/
 
 static size_t CalcFree(const size_t w, const size_t r, const size_t size) {
-  if (w < r) {
+  if (r > w) {
     return (r - w) - 1U;
   } else {
     return (size - (w - r)) - 1U;
