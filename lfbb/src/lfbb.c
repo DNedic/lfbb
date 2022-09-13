@@ -81,15 +81,11 @@ uint8_t *LFBB_WriteAcquire(const LFBB_Inst_Type *inst,
   const size_t r = atomic_load_explicit(&inst->r, memory_order_acquire);
   const size_t size = inst->size;
 
-  /* Early return if there is not enough total free space */
   const size_t free = CalcFree(w, r, size);
-  if (free_required > free) {
-    return NULL;
-  }
-
-  /* Try to find enough linear space until the end of the buffer */
   const size_t linear_space = size - r;
   const size_t linear_free = MIN(free, linear_space);
+
+  /* Try to find enough linear space until the end of the buffer */
   if (free_required <= linear_free) {
     return &inst->data[w];
   }
