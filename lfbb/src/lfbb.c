@@ -144,14 +144,14 @@ uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
   const size_t i = atomic_load_explicit(&inst->i, memory_order_acquire);
   const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
 
-  /* When write and read indexes are equal, the buffer is empty */
-  if (w == r) {
+  /* When read and write indexes are equal, the buffer is empty */
+  if (r == w) {
     *available = 0;
     return NULL;
   }
 
-  /* Simplest case, write index is ahead of read index */
-  if (w > r) {
+  /* Simplest case, read index is behind the write index */
+  if (r < w) {
     *available = w - r;
     return &inst->data[r];
   }
@@ -194,7 +194,7 @@ void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
 /********************* PRIVATE FUNCTIONS **********************/
 
 static size_t CalcFree(const size_t w, const size_t r, const size_t size) {
-  if (r > w) {
+  if (w < r) {
     return (r - w) - 1U;
   } else {
     return (size - (w - r)) - 1U;
