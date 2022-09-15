@@ -59,14 +59,13 @@ if (!write_started) {
 ```
 
 ## Configuration
-By default the library is configured to be thread and multicore safe on most systems, however some
-configuration may be needed for space efficiency on embedded systems and on systems with nonstandard cacheline lengths.
+Some configuration may be needed for space efficiency on embedded systems and for performance on systems with nonstandard cacheline lengths.
 
 The library offers two configuration defines ```LFBB_MULTICORE_HOSTED``` and ```LFBB_CACHELINE_LENGTH``` that can be passed by the build system or defined before including the library.
 
 On embedded systems it is usually required to do manual cache synchronization, so ```LFBB_MULTICORE_HOSTED``` can be set to ```false``` to avoid wasting space on padding for cacheline alignment of indexes.
 
-Some systems have a non-typical cacheline length (for instance the apple M1/M2 CPUs have a cacheline length of 128 bytes), and ```LFBB_CACHELINE_LENGTH``` should be set accordingly in those cases.
+Some systems have a non-typical cacheline length (for instance the apple M1/M2 CPUs have a cacheline length of 128 bytes), and ```LFBB_CACHELINE_LENGTH``` should be set accordingly in those cases to avoid the false sharing phenomenom and the performance drop that comes from it.
 
 ## Dealing with caches on embedded systems
 When using the library with DMA or multicore on embedded systems with cache it is necessary to perform manual cache synchronization in one of the following ways:
