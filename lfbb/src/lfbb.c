@@ -4,7 +4,7 @@
  * c11 suitable for both low-end microcontrollers all the way
  * to HPC machines. Lock-free for single consumer single
  * producer scenarios.
- * @version	1.2.1
+ * @version 1.2.1
  * @date 15. September 2022
  * @author Djordje Nedic
  **************************************************************/
