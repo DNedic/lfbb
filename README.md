@@ -5,7 +5,7 @@ LFBB is a bipartite buffer implementation written in standard C11, suitable for 
 
 ## What is a bipartite buffer
 
-A bipartite buffer is a variation of the classic [ring buffer](https://en.wikipedia.org/wiki/Circular_buffer) with the ability to always be able to provide the user with contigous memory regions inside the buffer for writing/reading if there is enough space/data.
+A bipartite buffer is a variation of the classic [ring buffer](https://en.wikipedia.org/wiki/Circular_buffer) with the ability to always be able to provide the user with contigous memory regions for writing/reading if there is enough space/data.
 [Here](https://www.codeproject.com/Articles/3479/The-Bip-Buffer-The-Circular-Buffer-with-a-Twist) is a nice writeup about the essence of bipartite buffers.
 
 ## Why use a bipartite buffer
@@ -18,10 +18,10 @@ A bipartite buffer should be used everywhere a ring buffer is used if you want:
 
 ## Features
 * Written in standard C11, compatible with all platforms supporting it
-* Lock free thread and multicore safe when used in single producer single consumer scenarios
+* Lock free thread and multicore safe in single producer single consumer scenarios
 * No dynamic allocation
+* Optimized for high performance
 * MIT Licensed
-* Supports CMake [FetchContent()](https://cmake.org/cmake/help/latest/module/FetchContent.html)
 
 ## How to get
 There are three main ways to get the library:
@@ -34,10 +34,10 @@ Shown here is an example of typical use:
 * Consumer thread/interrupt
 ```c
 size_t data_available;
-uint8_t *read_location = LFBB_ReadAcquire(&lfbb_adc, &data_available);
+uint8_t *read_ptr = LFBB_ReadAcquire(&lfbb_adc, &data_available);
 
-if (read_location != NULL) {
-  size_t data_used = DoStuffWithData(read_location, data_available);
+if (read_ptr != NULL) {
+  size_t data_used = DoStuffWithData(read_ptr, data_available);
   LFBB_ReadRelease(&lfbb_adc, data_used);
 }
 ```
@@ -45,9 +45,9 @@ if (read_location != NULL) {
 * Producer thread/interrupt
 ```c
 if (!write_started) {
-  uint8_t *write_location = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
-  if (write_location != NULL) {
-    ADC_StartDma(&adc_dma_h, write_location, sizeof(data));
+  uint8_t *write_ptr = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
+  if (write_ptr != NULL) {
+    ADC_StartDma(&adc_dma_h, write_ptr, sizeof(data));
     write_started = true;
   }
 } else {
