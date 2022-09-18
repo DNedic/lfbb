@@ -36,3 +36,7 @@
 
 - Refactored for performance improvements and code quality
 - Improved documentation in regards to configuration
+
+## 1.2.2
+
+- Improved performance by using a write_wrapped flag instead of infering write wraps
