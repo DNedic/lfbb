@@ -62,7 +62,7 @@ extern "C" {
 /************************** DEFINE ****************************/
 
 #ifndef LFBB_MULTICORE_HOSTED
-#define LFBB_MULTICORE_HOSTED true
+#define LFBB_MULTICORE_HOSTED false
 #endif
 
 #ifndef LFBB_CACHELINE_LENGTH
