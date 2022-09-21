@@ -40,3 +40,7 @@
 ## 1.2.2
 
 - Improved performance by using a write_wrapped flag instead of infering write wraps
+
+## 1.3.0
+
+- Set ```LFBB_MULTICORE_HOSTED``` to ```false``` by default. This is a more embedded-friendly configuration which doesn't impact hosted platforms performance significantly if the library is left unconfigured but avoids wasting space on embedded devices. When using the library on hosted platforms passing ```LFBB_MULTICORE_HOSTED``` as ```true``` is now advised for maximum performance.
