@@ -37,24 +37,24 @@ size_t data_available;
 uint8_t *read_ptr = LFBB_ReadAcquire(&lfbb_adc, &data_available);
 
 if (read_ptr != NULL) {
-  size_t data_used = DoStuffWithData(read_ptr, data_available);
-  LFBB_ReadRelease(&lfbb_adc, data_used);
+    size_t data_used = DoStuffWithData(read_ptr, data_available);
+    LFBB_ReadRelease(&lfbb_adc, data_used);
 }
 ```
 
 * Producer thread/interrupt
 ```c
 if (!write_started) {
-  uint8_t *write_ptr = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
-  if (write_ptr != NULL) {
-    ADC_StartDma(&adc_dma_h, write_ptr, sizeof(data));
-    write_started = true;
-  }
+    uint8_t *write_ptr = LFBB_WriteAcquire(&lfbb_adc, sizeof(data));
+    if (write_ptr != NULL) {
+        ADC_StartDma(&adc_dma_h, write_ptr, sizeof(data));
+        write_started = true;
+    }
 } else {
-  if (ADC_PollDmaComplete(&adc_dma_h) {
-    LFBB_WriteRelease(&lfbb_adc, sizeof(data));
-    write_started = false;
-  }
+    if (ADC_PollDmaComplete(&adc_dma_h) {
+        LFBB_WriteRelease(&lfbb_adc, sizeof(data));
+        write_started = false;
+    }
 }
 ```
 

@@ -4,8 +4,8 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(lfbb
-  VERSION 1.3.0
-  LANGUAGES C CXX
+    VERSION 1.3.0
+    LANGUAGES C CXX
 )
 
 add_subdirectory(lfbb)
@@ -13,5 +13,5 @@ add_subdirectory(lfbb)
 # Only build tests if we're actually working on the library,
 # not when the library is being used in a project
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  add_subdirectory(tests)
+    add_subdirectory(tests)
 endif()

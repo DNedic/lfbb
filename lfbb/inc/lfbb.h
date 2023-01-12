@@ -73,19 +73,19 @@ extern "C" {
 
 typedef struct {
 #if LFBB_MULTICORE_HOSTED
-  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t r; /**< Read index */
-  alignas(LFBB_CACHELINE_LENGTH) atomic_size_t w; /**< Write index */
-  alignas(LFBB_CACHELINE_LENGTH)
-      atomic_size_t i; /**< Invalidated space index */
+    alignas(LFBB_CACHELINE_LENGTH) atomic_size_t r; /**< Read index */
+    alignas(LFBB_CACHELINE_LENGTH) atomic_size_t w; /**< Write index */
+    alignas(LFBB_CACHELINE_LENGTH)
+        atomic_size_t i; /**< Invalidated space index */
 #else
-  atomic_size_t r; /**< Read index */
-  atomic_size_t w; /**< Write index */
-  atomic_size_t i; /**< Invalidated space index */
+    atomic_size_t r; /**< Read index */
+    atomic_size_t w; /**< Write index */
+    atomic_size_t i; /**< Invalidated space index */
 #endif
-  size_t size;        /**< Size of the data array */
-  uint8_t *data;      /**< Pointer to the data array */
-  bool write_wrapped; /**< Write wrapped flag, used only in the producer */
-  bool read_wrapped;  /**< Read wrapped flag, used only in the consumer */
+    size_t size;        /**< Size of the data array */
+    uint8_t *data;      /**< Pointer to the data array */
+    bool write_wrapped; /**< Write wrapped flag, used only in the producer */
+    bool read_wrapped;  /**< Read wrapped flag, used only in the consumer */
 } LFBB_Inst_Type;
 
 /******************** FUNCTION PROTOTYPES *********************/
