@@ -44,3 +44,7 @@
 ## 1.3.0
 
 - Set ```LFBB_MULTICORE_HOSTED``` to ```false``` by default. This is a more embedded-friendly configuration which doesn't impact hosted platforms performance significantly if the library is left unconfigured but avoids wasting space on embedded devices. When using the library on hosted platforms passing ```LFBB_MULTICORE_HOSTED``` as ```true``` is now advised for maximum performance.
+
+## 1.3.1
+
+- A critical bug where valid data would be invalidated if the write ended exactly on the end of the buffer was fixed - [@KOLANICH](https://github.com/KOLANICH) in [lfbb_cpp](https://github.com/DNedic/lfbb_cpp)
