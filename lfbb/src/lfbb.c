@@ -115,17 +115,19 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
         w = 0U;
     }
 
-    /* Increment the write index and wrap to 0 if needed */
+    /* Increment the write index */
     w += written;
-    if (w == inst->size) {
-        w = 0U;
-    }
 
     /* If we wrote over invalidated parts of the buffer move the invalidate
      * index
      */
     if (w > i) {
         i = w;
+    }
+
+    /* Wrap the write index if we reached the end of the buffer */
+    if (w == inst->size) {
+        w = 0U;
     }
 
     /* Store the indexes with adequate memory ordering */

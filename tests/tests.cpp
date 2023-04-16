@@ -194,3 +194,29 @@ TEST_CASE("Interleaved write and read without enough space",
     write_location = LFBB_WriteAcquire(&lfbb, sizeof(test_data2));
     REQUIRE(write_location == nullptr);
 }
+
+TEST_CASE("Write ends exactly at the end of the buffer",
+          "[write_ends_at_buffer_end]") {
+    const size_t write_size = 8;
+    uint8_t buf[write_size * 2];
+
+    LFBB_Inst_Type lfbb;
+    LFBB_Init(&lfbb, buf, sizeof(buf));
+
+    /* 1. Write the first half */
+    LFBB_WriteAcquire(&lfbb, write_size);
+    LFBB_WriteRelease(&lfbb, write_size);
+
+    /* 2. Read the first half */
+    size_t read_available;
+    LFBB_ReadAcquire(&lfbb, &read_available);
+    LFBB_ReadRelease(&lfbb, write_size);
+
+    /* 3. Write the second half */
+    uint8_t *second_half_write = LFBB_WriteAcquire(&lfbb, write_size);
+    LFBB_WriteRelease(&lfbb, write_size);
+
+    /* 4. Read the second half */
+    uint8_t *second_half_read = LFBB_ReadAcquire(&lfbb, &read_available);
+    REQUIRE(second_half_read == second_half_write);
+}
