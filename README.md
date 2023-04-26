@@ -68,7 +68,7 @@ For hosted systems the [False Sharing](https://en.wikipedia.org/wiki/False_shari
 Some systems have a non-typical cacheline length (for instance the apple M1/M2 CPUs have a cacheline length of 128 bytes), and ```LFBB_CACHELINE_LENGTH``` should be set accordingly in those cases.
 
 ## Dealing with caches on embedded systems
-When using the library with DMA or multicore on embedded systems with cache it is necessary to perform manual cache synchronization in one of the following ways:
+When using the library with DMA or asymmetric multicore on embedded systems with cache it is necessary to perform manual cache synchronization in one of the following ways:
 * Using platform specific data synchronization barriers (```DSB``` on ARM)
 * By manually invalidating cache
 * By setting the MPU/MMU up to not cache the data buffer
