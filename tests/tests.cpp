@@ -16,7 +16,7 @@ TEST_CASE("Write to the beginning", "[write_beginning]") {
 
     LFBB_WriteRelease(&lfbb, sizeof(test_data));
 
-    size_t read_available;
+    size_t read_available = 0;
     const uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
 
     REQUIRE(read_location != nullptr);
@@ -40,7 +40,7 @@ TEST_CASE("Try to acquire read with an empty buffer", "[read_empty]") {
     LFBB_Inst_Type lfbb;
     LFBB_Init(&lfbb, buf, sizeof(buf));
 
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
     REQUIRE(read_location == nullptr);
     REQUIRE(read_available == 0);
@@ -58,7 +58,7 @@ TEST_CASE("Write with overflow condition", "[write_overflow]") {
     memcpy(write_location, test_data, sizeof(test_data));
     LFBB_WriteRelease(&lfbb, sizeof(test_data));
 
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
     LFBB_ReadRelease(&lfbb, sizeof(test_data));
 
@@ -89,7 +89,7 @@ TEST_CASE("Read data written after overflow condition write",
     memcpy(write_location, test_data, sizeof(test_data));
     LFBB_WriteRelease(&lfbb, sizeof(test_data));
 
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
     LFBB_ReadRelease(&lfbb, sizeof(test_data));
 
@@ -130,7 +130,7 @@ TEST_CASE("Interleaved write and read with enough space",
 
     /* 2. Read acquire, the linear space previously written is reserved for
      * reading now */
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
 
     /* 3. Write acquire, a linear space after the read linear space is reserved
@@ -165,7 +165,7 @@ TEST_CASE("Interleaved write and read with enough space 2",
 
     /* 3. Read acquire, the linear space previously written is reserved for
      * reading now */
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
     REQUIRE(read_location != nullptr);
     REQUIRE(memcmp(test_data, read_location, sizeof(test_data)) == 0U);
@@ -186,7 +186,7 @@ TEST_CASE("Interleaved write and read without enough space",
 
     /* 2. Read acquire, the linear space previously written is reserved for
      * reading now */
-    size_t read_available;
+    size_t read_available = 0;
     uint8_t *read_location = LFBB_ReadAcquire(&lfbb, &read_available);
 
     /* 3. Write acquire, attempt to acquire more linear space than available */
@@ -208,7 +208,7 @@ TEST_CASE("Write ends exactly at the end of the buffer",
     LFBB_WriteRelease(&lfbb, write_size);
 
     /* 2. Read the first half */
-    size_t read_available;
+    size_t read_available = 0;
     LFBB_ReadAcquire(&lfbb, &read_available);
     LFBB_ReadRelease(&lfbb, write_size);
 
