@@ -131,7 +131,7 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
     }
 
     /* Store the indexes with adequate memory ordering */
-    atomic_store_explicit(&inst->i, i, memory_order_release);
+    atomic_store_explicit(&inst->i, i, memory_order_relaxed);
     atomic_store_explicit(&inst->w, w, memory_order_release);
 }
 
@@ -143,7 +143,7 @@ uint8_t *LFBB_ReadAcquire(LFBB_Inst_Type *inst, size_t *available) {
     /* Preload variables with adequate memory ordering */
     const size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
     const size_t w = atomic_load_explicit(&inst->w, memory_order_acquire);
-    const size_t i = atomic_load_explicit(&inst->i, memory_order_acquire);
+    const size_t i = atomic_load_explicit(&inst->i, memory_order_relaxed);
 
     /* When read and write indexes are equal, the buffer is empty */
     if (r == w) {
