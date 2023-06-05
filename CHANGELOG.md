@@ -48,3 +48,7 @@
 ## 1.3.1
 
 - A critical bug where valid data would be invalidated if the write ended exactly on the end of the buffer was fixed - [@KOLANICH](https://github.com/KOLANICH) in [lfbb_cpp](https://github.com/DNedic/lfbb_cpp)
+
+## 1.3.2
+
+- Performance and code conciseness improvements
