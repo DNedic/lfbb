@@ -10,6 +10,18 @@ project(lfbb
 
 add_subdirectory(lfbb)
 
+# Library configuration
+if (DEFINED LFBB_MULTICORE_HOSTED)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE LFBB_MULTICORE_HOSTED)
+endif()
+
+if (DEFINED LFBB_CACHELINE_LENGTH)
+    target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+        LFBB_CACHELINE_LENGTH=${LFBB_CACHELINE_LENGTH}
+    )
+endif()
+
 # Only build tests if we're actually working on the library,
 # not when the library is being used in a project
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
