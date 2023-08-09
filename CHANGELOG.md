@@ -52,3 +52,7 @@
 ## 1.3.2
 
 - Performance and code conciseness improvements
+
+## 1.3.3
+
+- Added the ability to configure the library through CMake
