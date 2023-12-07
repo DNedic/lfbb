@@ -56,3 +56,7 @@
 ## 1.3.3
 
 - Added the ability to configure the library through CMake
+
+## 1.3.4
+
+- A critical linear space calculation bug that could cause data corruption was fixed
