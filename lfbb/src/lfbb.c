@@ -82,7 +82,7 @@ uint8_t *LFBB_WriteAcquire(LFBB_Inst_Type *inst, const size_t free_required) {
     const size_t size = inst->size;
 
     const size_t free = CalcFree(w, r, size);
-    const size_t linear_space = size - r;
+    const size_t linear_space = size - w;
     const size_t linear_free = MIN(free, linear_space);
 
     /* Try to find enough linear space until the end of the buffer */
@@ -116,6 +116,7 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
     }
 
     /* Increment the write index */
+    assert(w + written <= inst->size);
     w += written;
 
     /* If we wrote over invalidated parts of the buffer move the invalidate
