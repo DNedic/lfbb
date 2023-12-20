@@ -174,13 +174,13 @@ void LFBB_ReadRelease(LFBB_Inst_Type *inst, const size_t read) {
     assert(inst != NULL);
     assert(inst->data != NULL);
 
-    /* Preload variables with adequate memory ordering */
-    size_t r = atomic_load_explicit(&inst->r, memory_order_relaxed);
-
     /* If the read wrapped, overflow the read index */
+    size_t r;
     if (inst->read_wrapped) {
         inst->read_wrapped = false;
         r = 0U;
+    } else {
+        r = atomic_load_explicit(&inst->r, memory_order_relaxed);
     }
 
     /* Increment the read index and wrap to 0 if needed */
