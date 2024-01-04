@@ -6,7 +6,6 @@ LFBB is a bipartite buffer implementation written in standard C11, suitable for 
 ## What is a bipartite buffer
 
 A bipartite buffer is a variation of the classic [ring buffer](https://en.wikipedia.org/wiki/Circular_buffer) with the ability to always be able to provide the user with contigous memory regions for writing/reading if there is enough space/data.
-[Here](https://www.codeproject.com/Articles/3479/The-Bip-Buffer-The-Circular-Buffer-with-a-Twist) is a nice writeup about the essence of bipartite buffers.
 
 ## Why use a bipartite buffer
 A bipartite buffer should be used everywhere a ring buffer is used if you want:
@@ -66,6 +65,57 @@ On embedded systems it is usually required to do manual cache synchronization, s
 For hosted systems the [False Sharing](https://en.wikipedia.org/wiki/False_sharing) phenomenom can reduce performance to some extent which is why passing ```LFBB_MULTICORE_HOSTED``` as ```true``` is advisable. This aligns the indexes to the system cacheline size, ```64``` by default.
 
 Some systems have a non-typical cacheline length (for instance the apple M1/M2 CPUs have a cacheline length of 128 bytes), and ```LFBB_CACHELINE_LENGTH``` should be set accordingly in those cases.
+
+## How it works
+The Bipartite Buffer uses the same base principle as the [ring buffer data structure](https://en.wikipedia.org/wiki/Circular_buffer), however its ability to provide contiguous space for writing and reading requires modifying the approach slightly.
+
+Let's consider a typical usage scenario, we want to acquire 4 slots for writing in the following buffer:
+
+<p align="center" width="100%">
+    <img src="docs/images/ring_buf_has_space.svg" width=40%>
+</p>
+
+We have 7 free slots, so this would work fine for a regular ring buffer.
+However when we unroll the buffer we can notice the issue:
+
+<p align="center" width="100%">
+    <img src="docs/images/ring_buf_unwrapped_has_space.svg" width=80%>
+</p>
+
+We cannot acquire 4 slots from the start of the free space, as there is not enough contiguous space until the end of the buffer, and the only solution is to acquire 4 slots from the beginning.
+
+After acquiring those slots, we have a gap in available data caused by the skip and we must somehow tell the buffer to avoid reading from that region:
+
+<p align="center" width="100%">
+    <img src="docs/images/bipartite_buf_unwrapped_after_wrapping_write.svg" width=80%>
+</p>
+
+This is where we introduce another index - the **invalidate index** ``i``.
+We can set it to the start of the region we want to skip, and next time we are reading the data, we only consider data until the invalidate index.
+
+<p align="center" width="100%">
+    <img src="docs/images/bipartite_buf_unwrapped_after_invalidate.svg" width=80%>
+</p>
+
+Now the first time we acquire data for reading, we will get the region from `r` to `i`:
+
+<p align="center" width="100%">
+    <img src="docs/images/bipartite_buf_unwrapped_after_invalidate_read1.svg" width=80%>
+</p>
+
+And the next time we will acquire the region from `0` to `w`:
+
+<p align="center" width="100%">
+    <img src="docs/images/bipartite_buf_unwrapped_after_invalidate_read2.svg" width=80%>
+</p>
+
+Lastly, when writing, we can write over invalidated parts of the buffer as it doesn't contain anything useful, but also have to move the invalidate index:
+
+<p align="center" width="100%">
+    <img src="docs/images/bipartite_buf_unwrapped_after_invalidate_write.svg" width=80%>
+</p>
+
+For more details, [here](https://www.codeproject.com/Articles/3479/The-Bip-Buffer-The-Circular-Buffer-with-a-Twist) is a nice writeup about Bipartite Buffers.
 
 ## Dealing with caches on embedded systems
 When using the library with DMA or asymmetric multicore on embedded systems with cache it is necessary to perform manual cache synchronization in one of the following ways:
