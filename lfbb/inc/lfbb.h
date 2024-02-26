@@ -34,7 +34,7 @@
  * This file is part of LFBB - Lock Free Bipartite Buffer
  *
  * Author:          Djordje Nedic <nedic.djordje2@gmail.com>
- * Version:         1.3.5
+ * Version:         1.3.6
  **************************************************************/
 
 /************************** INCLUDE ***************************/
