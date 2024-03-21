@@ -101,15 +101,16 @@ void LFBB_WriteRelease(LFBB_Inst_Type *inst, const size_t written) {
     assert(inst != NULL);
     assert(inst->data != NULL);
 
-    /* Preload variables with adequate memory ordering */
     size_t w = atomic_load_explicit(&inst->w, memory_order_relaxed);
-    size_t i = atomic_load_explicit(&inst->i, memory_order_relaxed);
 
     /* If the write wrapped set the invalidate index and reset write index*/
+    size_t i;
     if (inst->write_wrapped) {
         inst->write_wrapped = false;
         i = w;
         w = 0U;
+    } else {
+        i = atomic_load_explicit(&inst->i, memory_order_relaxed);
     }
 
     /* Increment the write index */
