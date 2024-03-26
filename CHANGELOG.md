@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.7
+
+- Added a performance optimization, where the atomic invalidate index load can be avoided after writing wraps
+
 ## 1.3.6
 - Fixed an omission where the invalidate index was sharing a cacheline with other members, leading to unnecessary performance loss
 
