@@ -197,6 +197,6 @@ static size_t CalcFree(const size_t w, const size_t r, const size_t size) {
     if (r > w) {
         return (r - w) - 1U;
     } else {
-        return (size - (w - r)) - 1U;
+        return size - (w - r);
     }
 }
